@@ -97,16 +97,8 @@ type Chain interface {
 
 func GetDefaultNetworkConfig(startingTimestamp uint64, logsDirectory string) NetworkConfig {
 	// Sanity check for L2s
-	if len(genesis.GeneratedGenesisDeployment.L2s) < 3 {
-		panic(fmt.Sprintf("Expected at least 3 L2 chains, but found %d", len(genesis.GeneratedGenesisDeployment.L2s)))
-	}
-
-	// Print out the number of L2 chains for verification
-	fmt.Printf("Number of L2 chains in GeneratedGenesisDeployment: %d\n", len(genesis.GeneratedGenesisDeployment.L2s))
-
-	// Print ChainIDs for each L2 chain
-	for i, l2 := range genesis.GeneratedGenesisDeployment.L2s {
-		fmt.Printf("L2 Chain %d - ChainID: %d\n", i, l2.ChainID)
+	if len(genesis.GeneratedGenesisDeployment.L2s) < 5 {
+		panic(fmt.Sprintf("Expected at least 5 L2 chains, but found %d", len(genesis.GeneratedGenesisDeployment.L2s)))
 	}
 
 	return NetworkConfig{
@@ -133,6 +125,8 @@ func GetDefaultNetworkConfig(startingTimestamp uint64, logsDirectory string) Net
 					DependencySet: []uint64{
 						genesis.GeneratedGenesisDeployment.L2s[1].ChainID, // OPChainB
 						genesis.GeneratedGenesisDeployment.L2s[2].ChainID, // OPChainC
+						genesis.GeneratedGenesisDeployment.L2s[3].ChainID, // OPChainD
+						genesis.GeneratedGenesisDeployment.L2s[4].ChainID, // OPChainE
 					},
 				},
 				StartingTimestamp: startingTimestamp,
@@ -149,6 +143,8 @@ func GetDefaultNetworkConfig(startingTimestamp uint64, logsDirectory string) Net
 					DependencySet: []uint64{
 						genesis.GeneratedGenesisDeployment.L2s[0].ChainID, // OPChainA
 						genesis.GeneratedGenesisDeployment.L2s[2].ChainID, // OPChainC
+						genesis.GeneratedGenesisDeployment.L2s[3].ChainID, // OPChainD
+						genesis.GeneratedGenesisDeployment.L2s[4].ChainID, // OPChainE
 					},
 				},
 				StartingTimestamp: startingTimestamp,
@@ -165,6 +161,44 @@ func GetDefaultNetworkConfig(startingTimestamp uint64, logsDirectory string) Net
 					DependencySet: []uint64{
 						genesis.GeneratedGenesisDeployment.L2s[0].ChainID, // OPChainA
 						genesis.GeneratedGenesisDeployment.L2s[1].ChainID, // OPChainB
+						genesis.GeneratedGenesisDeployment.L2s[3].ChainID, // OPChainD
+						genesis.GeneratedGenesisDeployment.L2s[4].ChainID, // OPChainE
+					},
+				},
+				StartingTimestamp: startingTimestamp,
+				LogsDirectory:     logsDirectory,
+			},
+			{
+				Name:          "OPChainD",
+				ChainID:       genesis.GeneratedGenesisDeployment.L2s[3].ChainID,
+				SecretsConfig: DefaultSecretsConfig,
+				GenesisJSON:   genesis.GeneratedGenesisDeployment.L2s[3].GenesisJSON,
+				L2Config: &L2Config{
+					L1ChainID:   genesis.GeneratedGenesisDeployment.L1.ChainID,
+					L1Addresses: genesis.GeneratedGenesisDeployment.L2s[3].RegistryAddressList(),
+					DependencySet: []uint64{
+						genesis.GeneratedGenesisDeployment.L2s[0].ChainID, // OPChainA
+						genesis.GeneratedGenesisDeployment.L2s[1].ChainID, // OPChainB
+						genesis.GeneratedGenesisDeployment.L2s[2].ChainID, // OPChainC
+						genesis.GeneratedGenesisDeployment.L2s[4].ChainID, // OPChainE
+					},
+				},
+				StartingTimestamp: startingTimestamp,
+				LogsDirectory:     logsDirectory,
+			},
+			{
+				Name:          "OPChainE",
+				ChainID:       genesis.GeneratedGenesisDeployment.L2s[4].ChainID,
+				SecretsConfig: DefaultSecretsConfig,
+				GenesisJSON:   genesis.GeneratedGenesisDeployment.L2s[4].GenesisJSON,
+				L2Config: &L2Config{
+					L1ChainID:   genesis.GeneratedGenesisDeployment.L1.ChainID,
+					L1Addresses: genesis.GeneratedGenesisDeployment.L2s[4].RegistryAddressList(),
+					DependencySet: []uint64{
+						genesis.GeneratedGenesisDeployment.L2s[0].ChainID, // OPChainA
+						genesis.GeneratedGenesisDeployment.L2s[1].ChainID, // OPChainB
+						genesis.GeneratedGenesisDeployment.L2s[2].ChainID, // OPChainC
+						genesis.GeneratedGenesisDeployment.L2s[3].ChainID, // OPChainD
 					},
 				},
 				StartingTimestamp: startingTimestamp,
